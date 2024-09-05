@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Login Page</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+  <style media="screen">
+    *,
+    *:before,
+    *:after {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #1a1a1a;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .background {
+      width: 430px;
+      height: 520px;
+      position: absolute;
+      transform: translate(-50%, -50%);
+      left: 50%;
+      top: 50%;
+    }
+
+    .background .shape {
+      height: 200px;
+      width: 200px;
+      position: absolute;
+      border-radius: 50%;
+    }
+
+    .shape:first-child {
+      background: linear-gradient(#ff7f50, #ff6347);
+      left: -80px;
+      top: -80px;
+    }
+
+    .shape:last-child {
+      background: linear-gradient(to right, #20bf6b, #01a95b);
+      right: -30px;
+      bottom: -80px;
+    }
+
+    form {
+      height: 520px;
+      width: 400px;
+      background-color: rgba(255, 255, 255, 0.1);
+      position: absolute;
+      transform: translate(-50%, -50%);
+      top: 50%;
+      left: 50%;
+      border-radius: 10px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 40px rgba(26, 26, 26, 0.6);
+      padding: 50px 35px;
+    }
+
+    form * {
+      color: #fff;
+      outline: none;
+      border: none;
+    }
+
+    form h3 {
+      font-size: 32px;
+      font-weight: 500;
+      line-height: 42px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 20px;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    input {
+      display: block;
+      height: 45px;
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.07);
+      border-radius: 3px;
+      padding: 0 10px;
+      margin-top: 8px;
+      font-size: 14px;
+      font-weight: 300;
+      color: #fff;
+    }
+
+    ::placeholder {
+      color: #b7b7b7;
+    }
+
+    button {
+      margin-top: 30px;
+      width: 100%;
+      background-color: #fff;
+      color: #1a1a1a;
+      padding: 15px 0;
+      font-size: 18px;
+      font-weight: 600;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #f2f2f2;
+    }
+
+    a {
+      display: block;
+      text-align: center;
+      color: #b7b7b7;
+      margin-top: 20px;
+    }
+
+    a:hover {
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="background">
+    <div class="shape"></div>
+    <div class="shape"></div>
+  </div>
+  <form method="post">
+    <h3>Login Here</h3>
+    {% csrf_token %}
+    <label for="username">Username</label>
+    <input type="text" placeholder="Enter Username" id="username" name="username">
+
+    <label for="password">Password</label>
+    <input type="password" placeholder="Password" id="password" name="password">
+
+    <button type="submit">Log In</button>
+    <a href="{% url 'signup' %}">Create an account</a>
+  </form>
+</body>
+</html>

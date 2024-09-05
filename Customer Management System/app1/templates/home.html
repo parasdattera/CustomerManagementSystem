@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Change Password</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container mt-5">
+    <h1 class="text-center">Customer Management System</h1>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#updateCustomerModal" id="customerUpdateButton">
+        Customer Update
+    </button>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#changePasswordModal">
+        Change Password
+      </button>
+      <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addCustomerModal">
+        Add Customer
+      </button>
+      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteCustomerModal" data-customerId="">
+        Delete Customer
+      </button>
+      <button type="button" class="btn btn-warning" id="userHistoryButton">
+        Users History
+      </button>      
+      <a href="{% url 'logout' %}" class="btn btn-secondary">Logout</a>
+    </div>
+  </div>
+
+  <!-- Change Password Modal -->
+  <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <!-- Add your change password form here -->
+        <form id="changePasswordForm" action="{% url 'change-password' %}" method="post">
+
+          <div class="modal-body">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="old_password">Old Password</label>
+              <input type="password" class="form-control" id="old_password" name="old_password" placeholder="Enter old password">
+            </div>
+            <div class="form-group">
+              <label for="new_password">New Password</label>
+              <input type="password" class="form-control" id="new_password" name="new_password" placeholder="Enter new password">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" id="changePasswordSubmit">Change Password</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Customer Modal -->
+  <div class="modal fade" id="addCustomerModal" tabindex="-1" role="dialog" aria-labelledby="addCustomerModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addCustomerModalLabel">Add Customer</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="addCustomerForm">
+          <div class="modal-body">
+            {% csrf_token %}
+            <!-- Hidden input field to store the customer ID -->
+            <input type="hidden" id="customer_id" name="customer_id" value="">
+            <div class="form-group">
+              <label for="customer_firstname">First Name</label>
+              <input type="text" class="form-control" id="customer_firstname_1" name="customer_firstname" placeholder="Enter customer's first name">
+            </div>
+            <div class="form-group">
+              <label for="customer_lastname">Last Name</label>
+              <input type="text" class="form-control" id="customer_lastname_1" name="customer_lastname" placeholder="Enter customer's last name">
+            </div>
+            <div class="form-group">
+              <label for="phone">Phone</label>
+              <input type="text" class="form-control" id="customer_phone" name="phone" placeholder="Enter phone number">
+            </div>
+            <div class="form-group">
+              <label for="address">Address</label>
+              <input type="text" class="form-control" id="customer_address" name="address" placeholder="Enter address">
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" class="form-control" id="customer_email" name="email" placeholder="Enter email">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-success" id="addCustomerSubmit">Add Customer</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Insert Password Modal -->
+  <div class="modal fade" id="insertPasswordModal" tabindex="-1" role="dialog" aria-labelledby="insertPasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="insertPasswordModalLabel">Insert Password</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form id="insertPasswordForm" action="{% url 'insert-password' %}" method="post">
+          <div class="modal-body">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" class="form-control" id="password" name="password" placeholder="Enter password">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Insert Password</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Customer Modal -->
+<div class="modal fade" id="deleteCustomerModal" tabindex="-1" role="dialog" aria-labelledby="deleteCustomerModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteCustomerModalLabel">Delete Customer</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="deleteCustomerForm">
+        <div class="modal-body">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="customer_id">Customer ID</label>
+            <input type="number" class="form-control" id="Customer_id" name="customer_id" placeholder="Enter customer ID">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger" id="deleteCustomerSubmit">Delete Customer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Update Customer Modal -->
+<div class="modal fade" id="updateCustomerModal" tabindex="-1" role="dialog" aria-labelledby="updateCustomerModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="updateCustomerModalLabel">Update Customer</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <form id="updateCustomerForm">
+              <div class="modal-body">
+                  {% csrf_token %}
+                  <div class="form-group">
+                      <label for="customer_firstname">First Name</label>
+                      <input type="text" class="form-control" id="customer_firstname" name="customer_firstname" placeholder="Enter customer's first name">
+                  </div>
+                  <div class="form-group">
+                      <label for="customer_lastname">Last Name</label>
+                      <input type="text" class="form-control" id="customer_lastname" name="customer_lastname" placeholder="Enter customer's last name">
+                  </div>
+                  <div class="form-group">
+                      <label for="phone">Phone</label>
+                      <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter phone number">
+                  </div>
+                  <div class="form-group">
+                      <label for="address">Address</label>
+                      <input type="text" class="form-control" id="address" name="address" placeholder="Enter address">
+                  </div>
+                  <div class="form-group">
+                      <label for="email">Email</label>
+                      <input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                  <button type="button" class="btn btn-info" id="updateCustomerSubmit">Update Customer</button>
+              </div>
+          </form>
+      </div>
+  </div>
+</div>
+
+
+<!-- Table to Display User's History -->
+<!-- Table to Display User's History -->
+<table class="table table-bordered mt-3" id="userHistoryTable" style="display: none;">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>User ID</th>
+      <th>Action</th>
+      <th>Action Timestamp</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- User's history data will be added here dynamically -->
+  </tbody>
+</table>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    // Function to show the "Insert Password" modal
+    function showInsertPasswordModal(customerId) {
+      const customerIdField = document.getElementById('customer_id');
+      customerIdField.value = customerId;
+      $('#insertPasswordModal').modal('show');
+    }
+  
+    // Function to handle submitting the "Insert Password" form
+    async function insertPassword() {
+      const insertPasswordForm = document.getElementById('insertPasswordForm');
+      const formData = new FormData(insertPasswordForm);
+  
+      const response = await fetch(insertPasswordForm.getAttribute('action'), {
+        method: 'POST',
+        body: formData,
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        alert(data.message);
+        insertPasswordForm.reset();
+        $('#insertPasswordModal').modal('hide');
+      } else {
+        alert(data.message);
+      }
+    }
+  
+    document.addEventListener('DOMContentLoaded', () => {
+      const addCustomerForm = document.getElementById('addCustomerForm');
+      const addCustomerSubmit = document.getElementById('addCustomerSubmit');
+  
+      addCustomerSubmit.addEventListener('click', async (event) => {
+        event.preventDefault(); // Prevent the default form submission
+  
+        const formData = new FormData(addCustomerForm);
+  
+        const response = await fetch('{% url 'add-customer' %}', {
+          method: 'POST',
+          body: formData,
+        });
+  
+        const data = await response.json();
+  
+        if (response.ok) {
+          alert(data.message);
+          addCustomerForm.reset();
+          $('#addCustomerModal').modal('hide');
+  
+          // Check if a customer_id is present in the response (indicating successful addition)
+          if (data.customer_id) {
+            // Show the "Insert Password" modal
+            showInsertPasswordModal(data.customer_id);
+          }
+        } else {
+          alert(data.message);
+        }
+      });
+    });
+
+    // Function to handle clicking the "Delete Customer" button
+    function handleDeleteCustomerClick(event) {
+    console.log('Delete Customer button clicked');
+    const customerId = event.target.getAttribute('data-customerId');
+    const customerIdField = document.querySelector('#deleteCustomerModal input[name="customer_id"]');
+    customerIdField.value = customerId;
+  }
+
+  // Attach the click event handler to all "Delete Customer" buttons
+  document.addEventListener('DOMContentLoaded', () => {
+    const deleteCustomerButtons = document.querySelectorAll('[data-toggle="modal"][data-target="#deleteCustomerModal"]');
+    deleteCustomerButtons.forEach(button => {
+      button.addEventListener('click', handleDeleteCustomerClick);
+    });
+
+    // Function to handle submitting the "Delete Customer" form
+    async function deleteCustomer() {
+      const deleteCustomerForm = document.getElementById('deleteCustomerForm');
+      const formData = new FormData(deleteCustomerForm);
+
+      const response = await fetch('{% url 'soft-delete-customer' %}', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert(data.message);
+        deleteCustomerForm.reset();
+        $('#deleteCustomerModal').modal('hide');
+      } else {
+        alert(data.message);
+      }
+    }
+
+    // Attach the click event handler to the "Delete Customer" submit button
+    const deleteCustomerSubmit = document.getElementById('deleteCustomerSubmit');
+    deleteCustomerSubmit.addEventListener('click', deleteCustomer);
+  });
+
+
+  // Function to handle the "Change Password" form submission
+async function changePassword() {
+  const changePasswordForm = document.getElementById('changePasswordForm');
+  const formData = new FormData(changePasswordForm);
+
+  const response = await fetch(changePasswordForm.getAttribute('action'), {
+    method: 'POST',
+    body: formData,
+  });
+
+  const data = await response.json();
+
+  if (response.ok) {
+    alert(data.message);
+    changePasswordForm.reset();
+    $('#changePasswordModal').modal('hide');
+  } else {
+    alert(data.message);
+  }
+}
+
+// Attach the click event handler to the "Change Password" submit button
+const changePasswordSubmit = document.getElementById('changePasswordSubmit');
+changePasswordSubmit.addEventListener('click', changePassword);
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    // ...
+
+    // Function to show the "Update Customer" modal
+    function showUpdateCustomerModal() {
+        $('#updateCustomerModal').modal('show');
+    }
+
+    // Function to handle submitting the "Update Customer" form
+    async function updateCustomer() {
+        const updateCustomerForm = document.getElementById('updateCustomerForm');
+        const formData = new FormData(updateCustomerForm);
+
+        const response = await fetch('{% url 'update-customer' %}', {
+            method: 'POST',
+            body: formData,
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert(data.message);
+            updateCustomerForm.reset();
+            $('#updateCustomerModal').modal('hide');
+        } else {
+            alert(data.error);
+        }
+    }
+
+    // Attach the click event handler to the "Customer Update" button
+    const customerUpdateButton = document.getElementById('customerUpdateButton');
+    customerUpdateButton.addEventListener('click', showUpdateCustomerModal);
+
+    // Attach the click event handler to the "Update Customer" submit button
+    const updateCustomerSubmit = document.getElementById('updateCustomerSubmit');
+    updateCustomerSubmit.addEventListener('click', updateCustomer);
+
+    // ...
+});
+
+// Function to handle clicking the "User's History" button
+// Function to handle clicking the "User's History" button
+// Function to handle clicking the "User's History" button
+async function handleUserHistoryClick() {
+  try {
+    // Fetch data from the API endpoint
+    const response = await fetch('{% url 'audit-trail' %}');
+    const data = await response.json();
+
+    if (response.ok) {
+      const auditTrailData = data.audit_tail;
+
+      if (auditTrailData && auditTrailData.length > 0) {
+        // Get a reference to the table body
+        const userHistoryTableBody = document.querySelector('#userHistoryTable tbody');
+
+        // Clear existing table rows
+        userHistoryTableBody.innerHTML = '';
+
+        // Iterate through the audit trail data and create table rows
+        auditTrailData.forEach((entry) => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${entry.id || ''}</td>
+            <td>${entry.user_id || ''}</td>
+            <td>${entry.action || ''}</td>
+            <td>${entry.action_timestamp || ''}</td>
+            <td>${entry.details || ''}</td>
+          `;
+          userHistoryTableBody.appendChild(row);
+        });
+
+        // Show the table
+        const userHistoryTable = document.getElementById('userHistoryTable');
+        userHistoryTable.style.display = 'table';
+      } else {
+        // Display a message if there's no audit trail data available
+        alert('No audit trail data available.');
+      }
+    } else {
+      alert('Failed to fetch audit trail data.');
+    }
+  } catch (error) {
+    console.error('Error fetching audit trail data:', error);
+    alert('An error occurred while fetching audit trail data.');
+  }
+}
+
+// Attach the click event handler to the "User's History" button
+document.addEventListener('DOMContentLoaded', () => {
+  const userHistoryButton = document.getElementById('userHistoryButton');
+  userHistoryButton.addEventListener('click', handleUserHistoryClick);
+});
+
+
+  </script>
+  
+</body>
+</html>
